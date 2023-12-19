@@ -3,6 +3,8 @@ using UnityEngine;
 public class Ball : MonoBehaviour
 {
     public float startForce = 200f;
+    public float minimumSpeed = 5f;
+    public float speedMultiplier = 1.5f;
 
     Rigidbody2D rb2D;
     Vector2 startPosition;
@@ -15,9 +17,15 @@ public class Ball : MonoBehaviour
         SetDefaultPosition();
     }
 
+    void FixedUpdate()
+    {
+        if (rb2D.velocity.magnitude < minimumSpeed)
+            rb2D.velocity = minimumSpeed * speedMultiplier * rb2D.velocity.normalized;
+    }
+
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (!other.gameObject.tag.Equals("Goal"))
+        if (!other.CompareTag("Goal"))
             return;
 
         SetDefaultPosition();
